@@ -333,5 +333,27 @@ public class StudentAttendanceService {
 		// 完了メッセージ
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
 	}
+	
 
+	/**
+	 * 吉田優希 Task.25 過去日の未入力チェック
+	 * 
+	 * @author 吉田優希
+	 * @return 判定結果
+	 */
+	public boolean notEnterChek() throws ParseException{
+		// 現在の日時を取得
+		Date trainingDate = attendanceUtil.getTrainingDate();
+		// 削除フラグ
+		Short deleteFlg = Constants.DB_FLG_FALSE;
+		// ログインユーザID取得
+		Integer lmsUserId = loginUserUtil.getLoginUserDto().getLmsUserId();
+		// 未入力件数を取得
+		Integer notEnterCount = tStudentAttendanceMapper.notEnterCount(lmsUserId,deleteFlg,trainingDate);
+		// 件数が 0 より大きければ true、そうでなければ false
+		if (notEnterCount > 0) {
+			return true;
+		}
+		return false;
+	}
 }
