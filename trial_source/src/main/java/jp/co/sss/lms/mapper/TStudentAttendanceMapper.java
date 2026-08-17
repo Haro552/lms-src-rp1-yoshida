@@ -65,7 +65,14 @@ public interface TStudentAttendanceMapper {
 	 */
 	Boolean update(TStudentAttendance tStudentAttendance);
 	
-	//吉田優希
+	/**
+	 * 吉田優希 Task.25 過去日の未入力チェック
+	 * 
+	 * @param lmsUserId 
+	 * @param deleteFlg 
+	 * @param trainingDate 
+	 * @return 未入力件数
+	 */
 	Integer notEnterCount
 		(@Param ("lmsUserId")Integer lmsUserId,
 		@Param ("deleteFlg")Short deleteFlg,
