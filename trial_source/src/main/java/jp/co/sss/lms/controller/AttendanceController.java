@@ -48,8 +48,8 @@ public class AttendanceController {
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
 		// 吉田優希 Task.25 過去日の未入力チェック
-			boolean result = studentAttendanceService.notEnterChek();
-			model.addAttribute("notEnterChek",result);
+			boolean notEnterChek = studentAttendanceService.notEnterChek();
+			model.addAttribute("result",notEnterChek);
 		
 		return "attendance/detail";
 	}
