@@ -336,7 +336,7 @@ public class StudentAttendanceService {
 	
 
 	/**
-	 * 吉田優希 Task.25 過去日の未入力チェック
+	 * Task.25 過去日の未入力チェック
 	 * 
 	 * @author 吉田優希
 	 * @return 判定結果
