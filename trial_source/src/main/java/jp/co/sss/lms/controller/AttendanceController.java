@@ -47,7 +47,11 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		// 吉田優希 Task.25 過去日の未入力チェック
+		/**
+		 * Task.25 過去日の未入力チェック
+		 * @author 吉田優希
+		 * @return 勤怠画面
+		 */
 			boolean notEnterChek = studentAttendanceService.notEnterChek();
 			model.addAttribute("result",notEnterChek);
 		
