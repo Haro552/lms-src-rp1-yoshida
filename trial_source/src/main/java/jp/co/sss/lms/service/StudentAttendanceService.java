@@ -220,6 +220,17 @@ public class StudentAttendanceService {
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
 
+		// Task.26 吉田優希
+		/*
+		 * 
+		 * ここ作成
+		 * 
+		 * 
+		 */
+		attendanceForm.setHourMap(attendanceUtil.getHourMap());
+		attendanceForm.setMinuteMap(attendanceUtil.getMinuteMap());
+		// Task.26 ここまで
+		
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
 			attendanceForm
@@ -238,6 +249,32 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+			/**
+			 * 多分ここら辺に書くやつ
+			 * # 加工の例
+		"09:15" -> 9,15//時間と分に分割しフォームにセットする 
+
+			 */
+			/**
+			 * 出勤の時間と分をFormにセット
+			 * 11:22）全体をUtilへ送る
+			 * Utilで11と22の時間と分に分けてここに返す
+			 */
+			// 出勤：時間
+			dailyAttendanceForm
+			.setTrainingStartTimeHour(attendanceUtil.getHour(attendanceManagementDto.getTrainingStartTime()));
+			// 出勤：分
+			dailyAttendanceForm
+			.setTrainingStartTimeMinute(attendanceUtil.getMinute(attendanceManagementDto.getTrainingStartTime()));
+			
+			// 退勤：時間
+			dailyAttendanceForm
+			.setTrainingEndTimeHour(attendanceUtil.getHour(attendanceManagementDto.getTrainingEndTime()));
+			// 退勤：分
+			dailyAttendanceForm
+			.setTrainingEndTimeMinute(attendanceUtil.getMinute(attendanceManagementDto.getTrainingEndTime()));
+			
+			
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
@@ -355,5 +392,28 @@ public class StudentAttendanceService {
 			return true;
 		}
 		return false;
+	}
+	/**
+	 * Task.26 入力された出退勤の{時間}{分}をhh:mm形式に変換し、AttendanceFormにセットする
+	 * @author 吉田優希
+	 * [if 出勤の「時」「分」が共に入力されている場合] %02d:%02d 形式で trainingStartTime にセットする。 
+	 * [if 退勤の「時」「分」が共に入力されている場合] %02d:%02d 形式で trainingEndTime にセットする。
+	 */
+	
+	public void formatConversion(AttendanceForm attendanceForm) {
+		// フォームのリストをループして抜き出し
+		for(DailyAttendanceForm form : attendanceForm.getAttendanceList()) {
+		// 出勤：時間が未入力ではない＆分が未入力ではないとき
+			if(form.getTrainingStartTimeHour() != null && form.getTrainingStartTimeMinute() != null) {
+		// フォームに出勤：hh時間、mm分に変換したものをセット（一気に）
+				form.setTrainingStartTime(String.format("%02d:%02d",
+						form.getTrainingStartTimeHour(),form.getTrainingStartTimeMinute()));
+			}
+		// 退勤も同じ
+			if(form.getTrainingEndTimeHour() != null && form.getTrainingEndTimeMinute() != null) {
+				form.setTrainingEndTime(String.format("%02d:%02d",
+						form.getTrainingEndTimeHour(),form.getTrainingEndTimeMinute()));
+			}
+		}
 	}
 }
